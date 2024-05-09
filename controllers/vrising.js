@@ -23,6 +23,18 @@ vrisingRouter.post('/bosses/:id', async (request, response) => {
   const id = request.params.id
   const {name, value} = request.body
 
+  try {
+    const boss = await VrisingBosses.findByPk(id)
+    // console.log('boss de la DDBB para cambiar: ', boss)
+    if(!boss)
+      return response.status(404).json({message: 'Boss not found'})
+    boss[name] = value
+    await boss.save()
+    return response.status(200).json({message: 'Boss updated'})
+  } catch (error) {
+    return response.status(500).json({message: error.message})
+  }
+
   
 
   return response.send('todo OK')

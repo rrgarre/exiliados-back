@@ -1,13 +1,19 @@
 const vrisingRouter = require('express').Router()
 const vrisingBoses = require('../utils/vrising-bosses').vrisingBosses
 const VrisingBosses = require('../models/vrising-bosses')
+// Objeto para operaciones de filtrado en BBDD
+const {Op} = require('sequelize')
 
 vrisingRouter.get('/bosses', async (request, response) => {
 
   // await inicializarTablaBoses()
 
   try {
-    const listaBosses = await VrisingBosses.findAll()
+    const listaBosses = await VrisingBosses.findAll({
+      order: [
+        ['order', 'ASC'] // Ordenar por el campo 'nombre' en orden ascendente
+      ]
+    })
     return response.send(listaBosses)
   } catch (error) {
     return {'error': 'No se pueden consultar los bosses'}
